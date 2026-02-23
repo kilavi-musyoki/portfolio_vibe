@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kilavi Musyoki — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a1f2e;
+    --bg2: #1e2436;
+    --surface: #242b3d;
+    --border: #2e3750;
+    --accent: #c8d0e8;
+    --accent2: #7b8cba;
+    --accent3: #4fc3f7;
+    --text: #e8ecf5;
+    --text2: #8a94b0;
+    --dust: #5a6a8a;
+    --glow: rgba(120,140,200,0.12);
+    --terminal-green: #64ffda;
+    --terminal-blue: #4fc3f7;
+    --terminal-purple: #ce93d8;
+    --terminal-orange: #ffb74d;
+  }
+  [data-theme="light"] {
+    --bg: #dce4f0;
+    --bg2: #d4dce8;
+    --surface: #ccd4e4;
+    --border: #b8c4d8;
+    --accent: #2a3650;
+    --accent2: #4a5878;
+    --text: #1a2035;
+    --text2: #4a5878;
+    --dust: #8a9ab8;
+    --glow: rgba(40,60,120,0.08);
+    --terminal-green: #006b55;
+    --terminal-blue: #0277bd;
+    --terminal-purple: #7b1fa2;
+    --terminal-orange: #e65100;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    overflow-x: hidden;
+    transition: background 0.5s, color 0.5s;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--accent2);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.2s, height 0.2s, opacity 0.3s;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+    z-index: 100;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text2);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* THEME TOGGLE */
+  .toggle-wrap { display: flex; align-items: center; gap: 0.6rem; }
+  .toggle-label { font-size: 0.7rem; color: var(--text2); letter-spacing: 0.1em; }
+  .toggle {
+    width: 40px; height: 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    background: var(--accent);
+    border-radius: 50%;
+    top: 2px; left: 2px;
+    transition: transform 0.3s, background 0.3s;
+  }
+  [data-theme="light"] .toggle::after { transform: translateX(18px); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    display: flex;
+    align-items: center;
+    gap: 5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ── TERMINAL WIDGET ── */
+  .terminal-wrap {
+    flex-shrink: 0;
+    width: 420px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  .terminal {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(120,140,200,0.08),
+      0 8px 40px rgba(0,0,0,0.5),
+      0 0 80px rgba(79,195,247,0.06);
+    position: relative;
+  }
+
+  [data-theme="light"] .terminal {
+    background: #1a1f2e;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #161b22;
+    border-bottom: 1px solid rgba(120,140,200,0.1);
+  }
+
+  [data-theme="light"] .terminal-bar { background: #0d1117; }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f56; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #27c93f; }
+
+  .terminal-title {
+    flex: 1;
+    text-align: center;
+    font-size: 0.65rem;
+    color: #5a6a8a;
+    letter-spacing: 0.1em;
+  }
+
+  .terminal-body {
+    padding: 1.4rem 1.6rem 1.8rem;
+    font-size: 0.78rem;
+    line-height: 1.9;
+    color: #c9d1d9;
+    min-height: 280px;
+  }
+
+  .t-prompt { color: #64ffda; }
+  .t-cmd { color: #c9d1d9; }
+  .t-comment { color: #5a6a8a; font-style: italic; }
+  .t-key { color: #79c0ff; }
+  .t-val { color: #a5d6ff; }
+  .t-str { color: #a5d6ff; }
+  .t-num { color: #ffb74d; }
+  .t-bool { color: #ce93d8; }
+  .t-output { color: #8b949e; }
+  .t-success { color: #64ffda; }
+  .t-err { color: #ff7b72; }
+  .t-blank { display: block; height: 0.6em; }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 7px; height: 1em;
+    background: #64ffda;
+    vertical-align: text-bottom;
+    animation: blink 1s step-start infinite;
+    margin-left: 1px;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .terminal-line { display: block; }
+  .terminal-line.hidden { display: none; }
+
+  /* Glowing edge on terminal */
+  .terminal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+    border: 1px solid rgba(79,195,247,0.15);
+    pointer-events: none;
+    animation: termGlow 3s ease-in-out infinite;
+  }
+  @keyframes termGlow {
+    0%,100% { box-shadow: inset 0 0 20px rgba(79,195,247,0.03); }
+    50% { box-shadow: inset 0 0 30px rgba(79,195,247,0.07); }
+  }
+
+  /* scanline effect */
+  .terminal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 10px;
+  }
+
+  /* HERO TEXT */
+  .hero-text { flex: 1; }
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-name span { color: var(--accent2); }
+  .hero-title {
+    font-size: 0.85rem;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    padding: 0.9rem 1.8rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, border-color 0.3s;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .hero-cta:hover { background: var(--glow); border-color: var(--accent2); }
+  .hero-cta-arrow { transition: transform 0.3s; }
+  .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+
+  /* Ambient particles */
+  #ambient-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 7rem 3rem;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 80px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--text);
+    margin-bottom: 3rem;
+    line-height: 1.1;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .about-bio {
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: var(--text2);
+  }
+  .about-bio p + p { margin-top: 1.2rem; }
+  .about-bio strong { color: var(--accent); font-weight: 500; }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .tag {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .tag:hover { border-color: var(--accent2); color: var(--accent); }
+  .about-stats { display: flex; flex-direction: column; gap: 2rem; }
+  .stat-item { border-left: 1px solid var(--border); padding-left: 1.5rem; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--text2); letter-spacing: 0.1em; margin-top: 0.3rem; }
+
+  /* PROJECTS */
+  #projects { background: var(--bg2); }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover { transform: translateY(-4px); border-color: var(--accent2); }
+  .project-card:hover::before { opacity: 1; }
+  .project-type {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.8rem;
+  }
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+  .project-desc {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: var(--text2);
+    margin-bottom: 1.5rem;
+  }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .stack-pill {
+    padding: 0.25rem 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+  }
+  .project-outcome {
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* WINS */
+  .wins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .win-item {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+    cursor: default;
+  }
+  .win-item:hover { border-color: var(--accent2); }
+  .win-icon { font-size: 1.4rem; margin-bottom: 0.8rem; }
+  .win-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .win-desc { font-size: 0.72rem; color: var(--text2); line-height: 1.6; }
+  .win-year { font-size: 0.65rem; color: var(--accent2); margin-top: 0.8rem; letter-spacing: 0.1em; }
+
+  .win-dust {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* CONTACT */
+  #contact { background: var(--bg2); }
+  .contact-inner {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .contact-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  .contact-headline em { color: var(--accent2); font-style: normal; }
+  .contact-sub { font-size: 0.82rem; color: var(--text2); margin-bottom: 3rem; line-height: 1.7; }
+  .contact-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+  .contact-link:hover { border-color: var(--accent2); color: var(--accent); background: var(--glow); }
+  .cv-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 1rem 2.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s, transform 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+  .cv-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* SCROLL PROGRESS */
+  .scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent2);
+    z-index: 200;
+    transition: width 0.1s;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 3rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.65rem;
+    color: var(--text2);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 900px) {
+    .terminal-wrap { width: 100%; max-width: 420px; }
+    .hero-inner { flex-direction: column; gap: 2.5rem; text-align: center; padding-top: 6rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    nav { padding: 1.2rem 1.5rem; }
+    .section-inner { padding: 5rem 1.5rem; }
+    .nav-links a:not(:last-child) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Ambient canvas -->
+<canvas id="ambient-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">KM</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#wins">Wins</a>
+    <a href="#contact">Contact</a>
+    <div class="toggle-wrap">
+      <span class="toggle-label" id="toggleLabel">Dark</span>
+      <div class="toggle" id="themeToggle" role="button" aria-label="Toggle theme" tabindex="0"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+
+    <!-- TERMINAL WIDGET (replaces avatar) -->
+    <div class="terminal-wrap">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="terminal-title">kilavi@musyoki ~ profile.json</span>
+        </div>
+        <div class="terminal-body" id="termBody">
+          <!-- lines injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO TEXT -->
+    <div class="hero-text">
+      <div class="hero-eyebrow">Seeking Industrial Attachment · Feb – May 2026</div>
+      <h1 class="hero-name">Kilavi<br><span>Musyoki</span></h1>
+      <p class="hero-title">Telecommunications & Information Engineering Student</p>
+      <a href="#about" class="hero-cta">
+        Explore my work
+        <span class="hero-cta-arrow">→</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">01 — About</div>
+    <h2 class="section-title reveal">Who I Am</h2>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-bio">
+          <p>I'm a <strong>Telecommunications and Information Engineering student</strong> at Dedan Kimathi University of Technology, Nyeri — passionate about building systems that bridge hardware and software to solve real-world problems.</p>
+          <p>My technical foundation spans <strong>electronics, embedded systems, networking, and programming</strong> — from designing PCB circuits in Proteus to configuring routers and writing signal processing code in Python and MATLAB.</p>
+          <p>I'm currently seeking an <strong>industrial attachment (February – May 2026)</strong> to apply my skills in a live engineering environment, contribute meaningfully, and grow fast.</p>
+        </div>
+        <div class="about-tags">
+          <span class="tag">Python</span>
+          <span class="tag">C</span>
+          <span class="tag">MATLAB</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">ESP32</span>
+          <span class="tag">Networking</span>
+          <span class="tag">Cisco Packet Tracer</span>
+          <span class="tag">PCB Design</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Git/GitHub</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">MySQL</span>
+        </div>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat-item">
+          <div class="stat-num">2027</div>
+          <div class="stat-label">Expected Graduation</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Academic Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Languages Spoken</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Problems Left to Solve</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">02 — Work</div>
+    <h2 class="section-title reveal">Selected Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-type">Embedded Systems</div>
+        <div class="project-title">Home Automation System</div>
+        <p class="project-desc">Designed and built a home automation system with Arduino to control lighting, curtains, and sensors including PIR, LDR, and LM35 temperature sensors — coordinated via RTC and LCD display.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Arduino</span>
+          <span class="stack-pill">C</span>
+          <span class="stack-pill">PIR/LDR/LM35</span>
+          <span class="stack-pill">RTC</span>
+          <span class="stack-pill">LCD</span>
+        </div>
+        <div class="project-outcome">↗ Full hardware + software integration from scratch</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">IoT / Cloud</div>
+        <div class="project-title">Fire Detection & Response System</div>
+        <p class="project-desc">Developed a real-time fire monitoring system that tracks smoke and heat levels, transmits data to a Firebase cloud backend, and displays live readings on a web-based dashboard for remote monitoring.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Firebase</span>
+          <span class="stack-pill">ESP32</span>
+          <span class="stack-pill">Web Dashboard</span>
+          <span class="stack-pill">Sensors</span>
+        </div>
+        <div class="project-outcome">↗ End-to-end IoT pipeline: sensor → cloud → dashboard</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">Digital Logic</div>
+        <div class="project-title">Digital Clock Converter (24h → 12h)</div>
+        <p class="project-desc">Designed a logic circuit to convert 24-hour time format to 12-hour display using comparators, flip-flops, and BCD logic, implemented and simulated in Logisim Evolution.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Logisim Evolution</span>
+          <span class="stack-pill">BCD Logic</span>
+          <span class="stack-pill">Flip-Flops</span>
+          <span class="stack-pill">Comparators</span>
+        </div>
+        <div class="project-outcome">↗ Clean digital logic design with full simulation verification</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">Analog Electronics</div>
+        <div class="project-title">Small Signal Amplifiers Analysis</div>
+        <p class="project-desc">Simulated and analysed single-stage and multistage amplifier circuits to study gain characteristics, frequency response, and signal behaviour across different configurations.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Multisim</span>
+          <span class="stack-pill">MATLAB</span>
+          <span class="stack-pill">LTspice</span>
+          <span class="stack-pill">Signal Processing</span>
+        </div>
+        <div class="project-outcome">↗ Comparative analysis across single & multi-stage topologies</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WINS -->
+<section id="wins">
+  <div class="section-inner">
+    <div class="section-label">03 — Recognition</div>
+    <h2 class="section-title reveal">Wins & Milestones</h2>
+    <div class="wins-grid">
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🎓</div>
+        <div class="win-title">BSc Telecommunications & Information Engineering</div>
+        <p class="win-desc">Currently pursuing a Bachelor's degree at Dedan Kimathi University of Technology — one of Kenya's leading STEM universities.</p>
+        <div class="win-year">2023 – 2027</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🏛️</div>
+        <div class="win-title">Class Representative</div>
+        <p class="win-desc">Elected class representative — bridging communication between students and faculty, organising academic activities and voicing student concerns.</p>
+        <div class="win-year">Ongoing</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">⚡</div>
+        <div class="win-title">IEEE Student Branch Member</div>
+        <p class="win-desc">Active member of the IEEE Student Branch at DeKUT — engaging with global engineering standards, workshops, and professional development.</p>
+        <div class="win-year">Ongoing</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🌐</div>
+        <div class="win-title">Trilingual Communicator</div>
+        <p class="win-desc">Fluent in English and Kiswahili, with beginner-level Mandarin — able to collaborate across diverse teams and international environments.</p>
+        <div class="win-year">Lifelong</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🔧</div>
+        <div class="win-title">Multi-Domain Technical Toolkit</div>
+        <p class="win-desc">Proficient across simulation tools (Multisim, Proteus, LTspice), networking tools (Cisco Packet Tracer), CAD (AutoCAD, Autodesk Inventor) and databases (MySQL, MongoDB).</p>
+        <div class="win-year">Built over 2+ years</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">☁️</div>
+        <div class="win-title">Cloud-Connected IoT Build</div>
+        <p class="win-desc">Independently built and deployed a full IoT pipeline — from embedded sensors to a Firebase-backed cloud system with a live web monitoring dashboard.</p>
+        <div class="win-year">2024</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner">
+      <div class="section-label" style="justify-content:center">04 — Contact</div>
+      <h2 class="contact-headline reveal">
+        Let's Build<br><em>Something Real.</em>
+      </h2>
+      <p class="contact-sub reveal">
+        I'm actively looking for an industrial attachment from February to May 2026 in networking, electronics, or ICT systems. If you're working on something meaningful — let's talk.
+      </p>
+      <div class="contact-links reveal">
+        <a href="mailto:musyokikilavi870@gmail.com" class="contact-link">✉ Email</a>
+        <a href="https://www.linkedin.com/in/kilavi-musyoki" target="_blank" class="contact-link">in LinkedIn</a>
+        <a href="https://github.com/kilavi-musyoki" target="_blank" class="contact-link">⌥ GitHub</a>
+      </div>
+      <a href="Kilavi%20Musyoki%20CV.pdf" download class="cv-btn reveal">↓ Download CV</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Kilavi Musyoki</span>
+  <span>Built with intention.</span>
+</footer>
+
+<script>
+// ─── CUSTOM CURSOR ───────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = -100, my = -100, rx = -100, ry = -100;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .toggle, .project-card, .win-item').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1.4)';
+    ring.style.opacity = '0.8';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.opacity = '0.5';
+  });
+});
+
+// ─── SCROLL PROGRESS ─────────────────────────────────────────
+const prog = document.getElementById('scrollProgress');
+window.addEventListener('scroll', () => {
+  const p = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = p + '%';
+});
+
+// ─── REVEAL ON SCROLL ────────────────────────────────────────
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80 * (e.target.dataset.delay || 0));
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+revealEls.forEach(el => obs.observe(el));
+
+// ─── THEME TOGGLE ────────────────────────────────────────────
+const toggle = document.getElementById('themeToggle');
+const label = document.getElementById('toggleLabel');
+let isDark = true;
+function setTheme(dark) {
+  isDark = dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  label.textContent = dark ? 'Dark' : 'Light';
+}
+toggle.addEventListener('click', () => setTheme(!isDark));
+toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') setTheme(!isDark); });
+
+// ─── WIN ITEM DUST HOVER ─────────────────────────────────────
+document.querySelectorAll('.win-item[data-dust]').forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    const dust = item.querySelector('.win-dust');
+    dust.innerHTML = '';
+    for (let i = 0; i < 8; i++) {
+      const d = document.createElement('div');
+      d.style.cssText = `
+        position:absolute;
+        width:${Math.random()*4+2}px;height:${Math.random()*4+2}px;
+        background:var(--dust);border-radius:50%;
+        left:${Math.random()*100}%;top:${Math.random()*100}%;
+        opacity:${Math.random()*0.6+0.2};
+        animation: dustFloat ${Math.random()*1+0.5}s ease-out forwards;
+        pointer-events:none;
+      `;
+      dust.appendChild(d);
+    }
+  });
+  item.addEventListener('mouseleave', () => {
+    item.querySelector('.win-dust').innerHTML = '';
+  });
+});
+
+const styleEl = document.createElement('style');
+styleEl.textContent = `
+@keyframes dustFloat {
+  from { transform: translateY(0) scale(1); opacity: 0.6; }
+  to { transform: translateY(-20px) scale(0); opacity: 0; }
+}`;
+document.head.appendChild(styleEl);
+
+// ─── AMBIENT PARTICLES ───────────────────────────────────────
+const ambCanvas = document.getElementById('ambient-canvas');
+const ambCtx = ambCanvas.getContext('2d');
+let ambParticles = [];
+
+function resizeAmb() {
+  ambCanvas.width = window.innerWidth;
+  ambCanvas.height = window.innerHeight;
+}
+resizeAmb();
+window.addEventListener('resize', resizeAmb);
+
+for (let i = 0; i < 60; i++) {
+  ambParticles.push({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    size: Math.random() * 1.5 + 0.3,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    opacity: Math.random() * 0.4 + 0.1
+  });
+}
+
+function animAmb() {
+  ambCtx.clearRect(0, 0, ambCanvas.width, ambCanvas.height);
+  ambParticles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = ambCanvas.width;
+    if (p.x > ambCanvas.width) p.x = 0;
+    if (p.y < 0) p.y = ambCanvas.height;
+    if (p.y > ambCanvas.height) p.y = 0;
+    ambCtx.beginPath();
+    ambCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ambCtx.fillStyle = `rgba(120,140,200,${p.opacity})`;
+    ambCtx.fill();
+  });
+  requestAnimationFrame(animAmb);
+}
+animAmb();
+
+// ─── TERMINAL TYPEWRITER ─────────────────────────────────────
+const termBody = document.getElementById('termBody');
+
+const lines = [
+  { delay: 300,  html: `<span class="t-prompt">❯</span> <span class="t-cmd">cat profile.json</span>` },
+  { delay: 700,  html: `<span class="t-output">{</span>` },
+  { delay: 950,  html: `&nbsp;&nbsp;<span class="t-key">"name"</span><span class="t-output">:</span> <span class="t-str">"Kilavi Musyoki"</span><span class="t-output">,</span>` },
+  { delay: 1200, html: `&nbsp;&nbsp;<span class="t-key">"role"</span><span class="t-output">:</span> <span class="t-str">"Telecom &amp; Information Engineer"</span><span class="t-output">,</span>` },
+  { delay: 1500, html: `&nbsp;&nbsp;<span class="t-key">"university"</span><span class="t-output">:</span> <span class="t-str">"DeKUT, Nyeri 🇰🇪"</span><span class="t-output">,</span>` },
+  { delay: 1800, html: `&nbsp;&nbsp;<span class="t-key">"stack"</span><span class="t-output">: [</span>` },
+  { delay: 2050, html: `&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Python"</span><span class="t-output">, </span><span class="t-str">"C"</span><span class="t-output">, </span><span class="t-str">"MATLAB"</span><span class="t-output">,</span>` },
+  { delay: 2300, html: `&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Arduino"</span><span class="t-output">, </span><span class="t-str">"ESP32"</span><span class="t-output">, </span><span class="t-str">"Linux"</span>` },
+  { delay: 2550, html: `&nbsp;&nbsp;<span class="t-output">],</span>` },
+  { delay: 2800, html: `&nbsp;&nbsp;<span class="t-key">"graduation"</span><span class="t-output">:</span> <span class="t-num">2027</span><span class="t-output">,</span>` },
+  { delay: 3050, html: `&nbsp;&nbsp;<span class="t-key">"projects"</span><span class="t-output">:</span> <span class="t-num">4</span><span class="t-output">,</span>` },
+  { delay: 3300, html: `&nbsp;&nbsp;<span class="t-key">"open_to_attachment"</span><span class="t-output">:</span> <span class="t-bool">true</span><span class="t-output">,</span>` },
+  { delay: 3550, html: `&nbsp;&nbsp;<span class="t-key">"mission"</span><span class="t-output">:</span> <span class="t-str">"Build. Learn. Impact."</span>` },
+  { delay: 3800, html: `<span class="t-output">}</span>` },
+  { delay: 4200, html: `<span class="t-blank"></span>` },
+  { delay: 4400, html: `<span class="t-prompt">❯</span> <span class="t-cmd">ping musyokikilavi870@gmail.com</span>` },
+  { delay: 5000, html: `<span class="t-success">✓ Connection established — let's build something.</span>` },
+];
+
+let lineIndex = 0;
+const blinkEl = document.createElement('span');
+blinkEl.className = 'cursor-blink';
+
+function showNextLine() {
+  if (lineIndex >= lines.length) {
+    // Keep blinking cursor at end
+    termBody.appendChild(blinkEl);
+    return;
+  }
+  const { delay, html } = lines[lineIndex];
+  setTimeout(() => {
+    // Remove blinking cursor from previous position
+    if (blinkEl.parentNode) blinkEl.parentNode.removeChild(blinkEl);
+
+    const span = document.createElement('span');
+    span.className = 'terminal-line';
+    span.innerHTML = html;
+    termBody.appendChild(span);
+    termBody.appendChild(document.createElement('br'));
+
+    lineIndex++;
+    showNextLine();
+  }, lineIndex === 0 ? delay : lines[lineIndex].delay - lines[lineIndex - 1].delay);
+}
+
+// Start terminal after a short pause
+setTimeout(showNextLine, 300);
+</script>
+</body>
+</html>
