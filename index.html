@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kilavi Musyoki — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Ambient canvas -->
+<canvas id="ambient-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">KM</a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#wins">Wins</a>
+    <a href="#contact">Contact</a>
+    <div class="toggle-wrap">
+      <span class="toggle-label" id="toggleLabel">Dark</span>
+      <div class="toggle" id="themeToggle" role="button" aria-label="Toggle theme" tabindex="0"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+
+    <!-- TERMINAL WIDGET (replaces avatar) -->
+    <div class="terminal-wrap">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="dot dot-r"></span>
+          <span class="dot dot-y"></span>
+          <span class="dot dot-g"></span>
+          <span class="terminal-title">kilavi@musyoki ~ profile.json</span>
+        </div>
+        <div class="terminal-body" id="termBody">
+          <!-- lines injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO TEXT -->
+    <div class="hero-text">
+      <div class="hero-eyebrow">herro😅👋</div>
+      <h1 class="hero-name">Kilavi<br><span>Musyoki</span></h1>
+      <p class="hero-title">Telecommunications & Information Engineering Student</p>
+      <a href="#about" class="hero-cta">
+        Explore my work
+        <span class="hero-cta-arrow">→</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">01 — About</div>
+    <h2 class="section-title reveal">Who I Am</h2>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="about-bio">
+          <p>I'm a <strong>Telecommunications and Information Engineering student</strong> at Dedan Kimathi University of Technology, Nyeri — passionate about building systems that bridge hardware and software to solve real-world problems.</p>
+          <p>My technical foundation spans <strong>electronics, embedded systems, networking, and programming</strong> — from designing PCB circuits in Proteus to configuring routers and writing signal processing code in Python and MATLAB.</p>
+        </div>
+        <div class="about-tags">
+          <span class="tag">Python</span>
+          <span class="tag">C</span>
+          <span class="tag">MATLAB</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">ESP32</span>
+          <span class="tag">Networking</span>
+          <span class="tag">Cisco Packet Tracer</span>
+          <span class="tag">PCB Design</span>
+          <span class="tag">Linux</span>
+          <span class="tag">Git/GitHub</span>
+          <span class="tag">Firebase</span>
+          <span class="tag">MySQL</span>
+        </div>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat-item">
+          <div class="stat-num">2027</div>
+          <div class="stat-label">Expected Graduation</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Academic Projects</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Languages Spoken</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Problems Left to Solve</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-label">02 — Work</div>
+    <h2 class="section-title reveal">Selected Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-type">Embedded Systems</div>
+        <div class="project-title">Home Automation System</div>
+        <p class="project-desc">Designed and built a home automation system with Arduino to control lighting, curtains, and sensors including PIR, LDR, and LM35 temperature sensors — coordinated via RTC and LCD display.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Arduino</span>
+          <span class="stack-pill">C</span>
+          <span class="stack-pill">PIR/LDR/LM35</span>
+          <span class="stack-pill">RTC</span>
+          <span class="stack-pill">LCD</span>
+        </div>
+        <div class="project-outcome">↗ Full hardware + software integration from scratch</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">IoT / Cloud</div>
+        <div class="project-title">Fire Detection & Response System</div>
+        <p class="project-desc">Developed a real-time fire monitoring system that tracks smoke and heat levels, transmits data to a Firebase cloud backend, and displays live readings on a web-based dashboard for remote monitoring.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Firebase</span>
+          <span class="stack-pill">ESP32</span>
+          <span class="stack-pill">Web Dashboard</span>
+          <span class="stack-pill">Sensors</span>
+        </div>
+        <div class="project-outcome">↗ End-to-end IoT pipeline: sensor → cloud → dashboard</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">Digital Logic</div>
+        <div class="project-title">Digital Clock Converter (24h → 12h)</div>
+        <p class="project-desc">Designed a logic circuit to convert 24-hour time format to 12-hour display using comparators, flip-flops, and BCD logic, implemented and simulated in Logisim Evolution.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Logisim Evolution</span>
+          <span class="stack-pill">BCD Logic</span>
+          <span class="stack-pill">Flip-Flops</span>
+          <span class="stack-pill">Comparators</span>
+        </div>
+        <div class="project-outcome">↗ Clean digital logic design with full simulation verification</div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-type">Analog Electronics</div>
+        <div class="project-title">Small Signal Amplifiers Analysis</div>
+        <p class="project-desc">Simulated and analysed single-stage and multistage amplifier circuits to study gain characteristics, frequency response, and signal behaviour across different configurations.</p>
+        <div class="project-stack">
+          <span class="stack-pill">Multisim</span>
+          <span class="stack-pill">MATLAB</span>
+          <span class="stack-pill">LTspice</span>
+          <span class="stack-pill">Signal Processing</span>
+        </div>
+        <div class="project-outcome">↗ Comparative analysis across single & multi-stage topologies</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WINS -->
+<section id="wins">
+  <div class="section-inner">
+    <div class="section-label">03 — Recognition</div>
+    <h2 class="section-title reveal">Wins & Milestones</h2>
+    <div class="wins-grid">
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🎓</div>
+        <div class="win-title">BSc Telecommunications & Information Engineering</div>
+        <p class="win-desc">Currently pursuing a Bachelor's degree at Dedan Kimathi University of Technology — one of Kenya's leading STEM universities.</p>
+        <div class="win-year">2023 – 2027</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🏛️</div>
+        <div class="win-title">Class Representative</div>
+        <p class="win-desc">Elected class representative — bridging communication between students and faculty, organising academic activities and voicing student concerns.</p>
+        <div class="win-year">Ongoing</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">⚡</div>
+        <div class="win-title">IEEE Student Branch Member</div>
+        <p class="win-desc">Active member of the IEEE Student Branch at DeKUT — engaging with global engineering standards, workshops, and professional development.</p>
+        <div class="win-year">Ongoing</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🌐</div>
+        <div class="win-title">Trilingual Communicator</div>
+        <p class="win-desc">Fluent in English and Kiswahili, with beginner-level Mandarin — able to collaborate across diverse teams and international environments.</p>
+        <div class="win-year">Lifelong</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">🔧</div>
+        <div class="win-title">Multi-Domain Technical Toolkit</div>
+        <p class="win-desc">Proficient across simulation tools (Multisim, Proteus, LTspice), networking tools (Cisco Packet Tracer), CAD (AutoCAD, Autodesk Inventor) and databases (MySQL, MongoDB).</p>
+        <div class="win-year">Built over 2+ years</div>
+      </div>
+
+      <div class="win-item reveal" data-dust="true">
+        <div class="win-dust"></div>
+        <div class="win-icon">☁️</div>
+        <div class="win-title">Cloud-Connected IoT Build</div>
+        <p class="win-desc">Independently built and deployed a full IoT pipeline — from embedded sensors to a Firebase-backed cloud system with a live web monitoring dashboard.</p>
+        <div class="win-year">2024</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-inner">
+      <div class="section-label" style="justify-content:center">04 — Contact</div>
+      <h2 class="contact-headline reveal">
+        Let's Build<br><em>Something Real.</em>
+      </h2>
+      <p class="contact-sub reveal">
+        I'm actively looking for an industrial attachment from February to end of 2026 in networking, electronics, or ICT systems. If you're working on something meaningful — let's talk.
+      </p>
+      <div class="contact-links reveal">
+        <a href="mailto:musyokikilavi870@gmail.com" class="contact-link">✉ Email</a>
+        <a href="https://www.linkedin.com/in/kilavi-musyoki" target="_blank" class="contact-link">in LinkedIn</a>
+        <a href="https://github.com/kilavi-musyoki" target="_blank" class="contact-link">⌥ GitHub</a>
+      </div>
+      <a href="Kilavi Musyoki CV.pdf" download class="cv-btn reveal">↓ Download CV</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Kilavi Musyoki</span>
+  <span>Built with intention.</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
