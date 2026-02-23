@@ -58,11 +58,21 @@ revealEls.forEach(el => obs.observe(el));
 const toggle = document.getElementById('themeToggle');
 const label = document.getElementById('toggleLabel');
 let isDark = true;
+
 function setTheme(dark) {
   isDark = dark;
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   label.textContent = dark ? 'Dark' : 'Light';
 }
+
+// Detect system preference on load
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+setTheme(prefersDark.matches);
+
+// Update automatically if user changes their OS theme
+prefersDark.addEventListener('change', e => setTheme(e.matches));
+
+// Manual toggle overrides system preference
 toggle.addEventListener('click', () => setTheme(!isDark));
 toggle.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') setTheme(!isDark); });
 
